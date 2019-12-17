@@ -83,9 +83,11 @@ const solveBoardWithBlocks = (board, blockList) => {
 const board1 = createBlock(5, 5, 0)
 
 const blockList = [
-    createBlock(1, 2, 3),
-    createBlock(1, 2, 2),
-    createBlock(3, 4, 1)
+    createBlock(1, 2, 5),
+    createBlock(2, 2, 4),
+    createBlock(2, 2, 3),
+    createBlock(2, 3, 2),
+    createBlock(3, 3, 1)
 ];
 
 

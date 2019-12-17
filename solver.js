@@ -47,6 +47,17 @@ const putBlockOnBoard = (board, block, x_, y_) => {
     return newBoard;
 }
 
+const createBlock = (x_, y_, color) {
+    var block = [];
+    for (var y = 0; y < y_, y ++) {
+        var row = [];
+        var (x = 0; x < x_, x ++) {
+            row.push(color);
+        }
+        block.push(row);
+    }
+    return block;
+}
 var board1 = [
     [1,1,1,0],
     [1,0,0,0],
@@ -54,10 +65,7 @@ var board1 = [
     [0,0,0,1],
 ];
 
-var block1 = [
-    [2],
-    [2]
-]
+var block1 = createBlock(1, 2, 3)
 
 nextSteps(board1, block1).forEach((b) => {
     console.log(b);

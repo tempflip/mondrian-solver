@@ -170,7 +170,7 @@ const solveBoardWithBlocks = (board, blockList) => {
 var board1 = createBlock(7, 7, 0);
 // var board1 = createBlock(4, 5, 0);
 
-const blockList = [
+var blockList = [
     createBlock(3, 3, 1),
     createBlock(3, 2, 2),
     createBlock(3, 2, 3),

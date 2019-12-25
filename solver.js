@@ -149,7 +149,7 @@ const solveBoardWithBlocks = (board, blockList) => {
             if (blockList.length > 0) {                
 
                 myNextSteps = myNextSteps.filter(bb => {
-                    return ifFitsAtAll(bb, maxX, 1) && ifFitsAtAll(brd, 1, maxY);
+                    return ifFitsAtAll(bb, maxX, 1) && ifFitsAtAll(bb, 1, maxY);
                 });                
 
             }

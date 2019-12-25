@@ -131,7 +131,14 @@ const getLargestBlockFromListY = (blockList) => {
     return maxY;
 }
 
-const solveBoardWithBlocks = (board, blockList) => {
+const solveBoardWithBlocks = (board, blockList_) => {
+    var blockList = blockList_.sort((a,b) => { // sorting by size. smallest to the first position
+        var aSize = a.length * a[0].length;
+        var bSize = b.length * b[0].length;
+    
+        if (aSize < bSize) return -1;
+        else return 1;
+    });
     var r = [board];
 
     while (blockList.length > 0) {
@@ -170,7 +177,7 @@ const solveBoardWithBlocks = (board, blockList) => {
 var board1 = createBlock(7, 7, 0);
 // var board1 = createBlock(4, 5, 0);
 
-var blockList = [
+const blockList = [
     createBlock(3, 3, 1),
     createBlock(3, 2, 2),
     createBlock(3, 2, 3),
@@ -181,15 +188,16 @@ var blockList = [
     createBlock(1, 7, 1),
 ];
 
+
 var t0 = Date.now();
 var sols = solveBoardWithBlocks(board1, blockList);
 console.log('Running time ', Date.now() - t0);
 
 
-// sols.forEach(e => {
-//     show.toScreen(e);
-//     console.log();
-// });
+sols.forEach(e => {
+    show.toScreen(e);
+    console.log();
+});
 
 console.log(pr1, pr2, pr3, pr4);
 console.log('possible sols: ', sols.length);

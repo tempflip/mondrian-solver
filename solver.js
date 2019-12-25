@@ -1,11 +1,19 @@
 const show = require('./show');
 
+var pr1 = 0;
+var pr2 = 0;
+var pr3 = 0;
+var pr4 = 0;
 const nextSteps = (board, block) => {
+    pr1++;    
     var nextList = [];
     var boardX = board[0].length;
     var boardY = board.length;
     var blockX = block[0].length;
     var blockY = block.length;
+
+    if (ifFitsAtAll(board, blockX, blockY) == false) return nextList; // if there is no way to fit, just jump out
+
 
     for (x = 0; x <= (boardX - blockX); x++) {
         for (var y = 0; y <= (boardY - blockY); y++) {
@@ -13,7 +21,9 @@ const nextSteps = (board, block) => {
                 var nextStep = putBlockOnBoard(board, block, x, y);
                 nextList.push(nextStep);
             } catch(err) {
-                // console.log('ez a pozi nem jo!')
+                // console.log('##', y, blockY);
+                // y += 1;
+                //console.log('ez a pozi nem jo!', blockY)
             }
         }
     }
@@ -22,6 +32,7 @@ const nextSteps = (board, block) => {
 }
 
 const putBlockOnBoard = (board, block, x_, y_) => {
+    pr3++;
     var newBoard = [];
     blockY = block.length;
     blockX = block[0].length;
@@ -65,14 +76,86 @@ const isBoardFull = (board) => {
     return full;
 }
 
+const isBoardEmpty = (board) => {
+    var empty = true;
+    board.forEach(row => {
+        row.forEach(pixel => {
+            if (pixel != 0) empty = false;
+        });
+    });
+    return empty;
+}
+
+const ifFitsAtAll = (board, x_, y_) => { // returns false if there is no place with a block with given dimensions
+    
+    for (var y = 0; y <= board.length - y_; y++) {
+        for (var x = 0; x <= board[0].length - x_; x++) {
+            var boardSlice = getBoardSlice(board, x, y, x_, y_);
+            var isEmpty = isBoardEmpty(boardSlice);
+            if (isEmpty) return true;
+        }
+    }
+    pr2++;
+    return false;
+
+}
+
+const getBoardSlice = (board, x_, y_, sliceX, sliceY) => {
+    var newBoard = [];
+    for (var y = y_; y < y_ + sliceY; y++) {
+        if (!board[y]) continue;
+
+        var row = [];
+        for (var x = x_; x < x_ + sliceX; x++) {
+            if (!board[y][x]) continue;
+            row.push(board[y][x]);
+        }
+        newBoard.push(row);
+    }
+    return newBoard;
+}
+
+const getLargestBlockFromListX = (blockList) => {
+    var maxX = 0;
+    blockList.forEach(block => {
+        if (block[0].length > maxX) maxX = block[0].length;
+    });
+    return maxX;
+}
+
+const getLargestBlockFromListY = (blockList) => {
+    var maxY = 0;
+    blockList.forEach(block => {
+        if (block.length > maxY) maxY = block.length;
+    });
+    return maxY;
+}
+
 const solveBoardWithBlocks = (board, blockList) => {
     var r = [board];
 
     while (blockList.length > 0) {
+        const maxX = getLargestBlockFromListX(blockList);
+        const maxY = getLargestBlockFromListY(blockList);
+
+        console.log('## ', maxX, maxY);
+
         var myBlock = blockList.pop();
         var rr = [];
         r.forEach(brd => {
-            rr = rr.concat(nextSteps(brd, myBlock));
+            pr4++;
+            
+            var myNextSteps = nextSteps(brd, myBlock);
+            if (blockList.length > 0) {                
+
+                myNextSteps = myNextSteps.filter(bb => {
+                    return ifFitsAtAll(bb, maxX, 1) && ifFitsAtAll(brd, 1, maxY);
+                });                
+
+            }
+
+
+            rr = rr.concat(myNextSteps);
         })
         r = rr;
     }
@@ -80,19 +163,34 @@ const solveBoardWithBlocks = (board, blockList) => {
 
 };
 
-const board1 = createBlock(5, 5, 0)
+
+var board1 = createBlock(6, 6, 0);
+// var board1 = createBlock(4, 5, 0);
 
 const blockList = [
-    createBlock(1, 2, 5),
-    createBlock(2, 2, 4),
-    createBlock(2, 2, 3),
-    createBlock(2, 3, 2),
-    createBlock(3, 3, 1)
+    createBlock(3, 3, 1),
+    createBlock(3, 2, 2),
+    createBlock(3, 2, 3),
+    createBlock(3, 2, 4),
+    createBlock(1, 3, 5),
+    createBlock(2, 3, 6),
 ];
 
+var t0 = Date.now();
+var sols = solveBoardWithBlocks(board1, blockList);
+console.log('Running time ', Date.now() - t0);
 
-solveBoardWithBlocks(board1, blockList).forEach(e => {
+
+sols.forEach(e => {
     show.toScreen(e);
     console.log();
 });
 
+console.log(pr1, pr2, pr3, pr4);
+console.log('possible sols: ', sols.length);
+// var board2 = createBlock(6, 6, 0);
+// board2 = putBlockOnBoard(board2, createBlock(3,3,1),0,0);
+
+// show.toScreen(board2);
+
+// console.log(ifFitsAtAll(board2, 3, 4));

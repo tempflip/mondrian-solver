@@ -135,10 +135,6 @@ const solveBoardWithBlocks = (board, blockList) => {
     var r = [board];
 
     while (blockList.length > 0) {
-        const maxX = getLargestBlockFromListX(blockList);
-        const maxY = getLargestBlockFromListY(blockList);
-
-        console.log('## ', maxX, maxY);
 
         var myBlock = blockList.pop();
         var rr = [];
@@ -148,8 +144,15 @@ const solveBoardWithBlocks = (board, blockList) => {
             var myNextSteps = nextSteps(brd, myBlock);
             if (blockList.length > 0) {                
 
-                myNextSteps = myNextSteps.filter(bb => {
-                    return ifFitsAtAll(bb, maxX, 1) && ifFitsAtAll(bb, 1, maxY);
+                myNextSteps = myNextSteps.filter(myBoard => {
+                    var allFits = true;
+                    blockList.forEach(thisBlock => {
+                        if (ifFitsAtAll(myBoard, thisBlock[0].length, thisBlock.length) == false) {
+                            allFits = false;
+                        }
+                    });
+
+                    return allFits;
                 });                
 
             }

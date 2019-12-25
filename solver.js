@@ -167,7 +167,7 @@ const solveBoardWithBlocks = (board, blockList) => {
 };
 
 
-var board1 = createBlock(6, 6, 0);
+var board1 = createBlock(7, 7, 0);
 // var board1 = createBlock(4, 5, 0);
 
 const blockList = [
@@ -177,6 +177,8 @@ const blockList = [
     createBlock(3, 2, 4),
     createBlock(1, 3, 5),
     createBlock(2, 3, 6),
+    createBlock(6, 1, 3),
+    createBlock(1, 7, 1),
 ];
 
 var t0 = Date.now();
@@ -184,10 +186,10 @@ var sols = solveBoardWithBlocks(board1, blockList);
 console.log('Running time ', Date.now() - t0);
 
 
-sols.forEach(e => {
-    show.toScreen(e);
-    console.log();
-});
+// sols.forEach(e => {
+//     show.toScreen(e);
+//     console.log();
+// });
 
 console.log(pr1, pr2, pr3, pr4);
 console.log('possible sols: ', sols.length);

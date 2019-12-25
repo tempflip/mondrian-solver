@@ -174,7 +174,7 @@ const solveBoardWithBlocks = (board, blockList_) => {
 };
 
 
-var board1 = createBlock(7, 7, 0);
+var board1 = createBlock(7, 8, 0);
 // var board1 = createBlock(4, 5, 0);
 
 const blockList = [
@@ -185,6 +185,7 @@ const blockList = [
     createBlock(1, 3, 5),
     createBlock(2, 3, 6),
     createBlock(6, 1, 3),
+    createBlock(1, 7, 1),
     createBlock(1, 7, 1),
 ];
 

@@ -91,12 +91,12 @@ const findUnique = (board_, fixedBlockList_, blockList_) => {
 var board1 = createBlock(7,7, 0);
 
 const fixedBlockList = [
+    createBlock(1, 1, 1),
     createBlock(1, 2, 1), 
     createBlock(1, 3, 1),
 ];
 
 const blockList = [
-    createBlock(1, 1, 2),
     createBlock(1, 4, 4),
     createBlock(2, 2, 5),
     createBlock(2, 3, 6),

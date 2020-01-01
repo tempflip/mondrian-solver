@@ -22,15 +22,55 @@ const getAllStartingBoards = (board_, fixedBlockList_) => {
             }
             startingBoardList = newStartingBoardList;
         });
-            
+           
         console.log(',,,,', startingBoardList.length);
     }
-    return startingBoardList;
+    
+    // filtering the symmetric ones
+
+    var startingBoardListJSON = startingBoardList.map((el) => JSON.stringify(el));
+    filteredBoardList = [];
+    startingBoardListJSON.forEach(thisBoard => {
+        var mirroredYBoard = JSON.stringify(mirrorY(JSON.parse(thisBoard)));
+        var mirroredXBoard = JSON.stringify(mirrorX(JSON.parse(thisBoard)));
+        var mirroredXYBoard = JSON.stringify(mirrorX(JSON.parse(mirroredYBoard)));
+        
+        if (filteredBoardList.indexOf(thisBoard) == -1 
+        && filteredBoardList.indexOf(mirroredYBoard) == -1
+        && filteredBoardList.indexOf(mirroredXBoard) == -1
+        && filteredBoardList.indexOf(mirroredXYBoard) == -1
+        ) {
+            filteredBoardList.push(thisBoard);
+        }
+    });
+    // return startingBoardList;
+    return filteredBoardList.map(el => JSON.parse(el));
+}
+
+const mirrorY = (board) => {
+    var newBoard = [];
+    for (var y = board.length-1; y >=0 ; y--) {
+        newBoard.push(board[y]);
+    }
+    return newBoard;
+}
+
+const mirrorX = (board) => {
+    var newBoard = [];
+
+    for (var y = 0; y < board.length; y ++) {
+        var row = [];
+        for (var x = board[0].length-1; x >=0 ; x--) {
+            row.push(board[y][x]);
+        }
+        newBoard.push(row);
+    }
+    return newBoard;
 }
 
 const findUnique = (board_, fixedBlockList_, blockList_) => {
     var startingBoardList = getAllStartingBoards(board_, fixedBlockList_);
-    
+    console.log('starting positions', startingBoardList.length);
     var solMap = {};
 
     for (var i = 0; i < startingBoardList.length; i++) {
@@ -51,12 +91,12 @@ const findUnique = (board_, fixedBlockList_, blockList_) => {
 var board1 = createBlock(7,7, 0);
 
 const fixedBlockList = [
-    createBlock(1, 1, 1),
     createBlock(1, 2, 1), 
     createBlock(1, 3, 1),
 ];
 
 const blockList = [
+    createBlock(1, 1, 2),
     createBlock(1, 4, 4),
     createBlock(2, 2, 5),
     createBlock(2, 3, 6),

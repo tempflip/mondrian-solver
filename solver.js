@@ -195,5 +195,6 @@ const solveBoardWithBlocks = (board, blockList_) => {
 module.exports = {
     createBlock : createBlock,
     solveBoardWithBlocks  : solveBoardWithBlocks,
-    putBlockOnBoard : putBlockOnBoard
+    putBlockOnBoard : putBlockOnBoard,
+    nextSteps : nextSteps
 };

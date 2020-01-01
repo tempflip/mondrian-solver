@@ -1,4 +1,3 @@
-const show = require('./show');
 
 var pr1 = 0;
 var pr2 = 0;
@@ -12,7 +11,8 @@ const nextSteps = (board, block) => {
     var blockX = block[0].length;
     var blockY = block.length;
 
-    if (ifFitsAtAll(board, blockX, blockY) == false) return nextList; // if there is no way to fit, just jump out
+    // no need bc there is pre filtering in the caller
+    // if (ifFitsAtAll(board, blockX, blockY) == false) return nextList; // if there is no way to fit, just jump out
 
 
     for (x = 0; x <= (boardX - blockX); x++) {
@@ -31,29 +31,48 @@ const nextSteps = (board, block) => {
     return nextList;
 }
 
+// const putBlockOnBoard = (board, block, x_, y_) => {
+//     pr3++;
+//     var newBoard = [];
+//     blockY = block.length;
+//     blockX = block[0].length;
+
+//     for (var y = 0; y < board.length; y++) {
+//         var row = [];
+//         for (var x = 0; x < board[0].length; x++) {
+//             pr2++;
+//             if (x >= x_ && x < x_+blockX && y >= y_ && y < y_+blockY) {
+//                 if (board[y][x] != 0) {
+//                     throw('This position is already used!');
+//                 }
+//                 row.push(block[y-y_][x-x_]);
+//             } else {
+//                 row.push(board[y][x]);
+//             }
+//         }
+//         newBoard.push(row);
+//     }
+//     return newBoard;
+// }
+
 const putBlockOnBoard = (board, block, x_, y_) => {
     pr3++;
-    var newBoard = [];
-    blockY = block.length;
-    blockX = block[0].length;
+    var newBoard = JSON.parse(JSON.stringify(board));
 
-    for (var y = 0; y < board.length; y++) {
-        var row = [];
-        for (var x = 0; x < board[0].length; x++) {
-            if (x >= x_ && x < x_+blockX && y >= y_ && y < y_+blockY) {
-                if (board[y][x] != 0) {
-                    throw('This position is already used!');
-                }
-                row.push(block[y-y_][x-x_]);
-            } else {
-                row.push(board[y][x]);
-            }
+    var blockX = block[0].length;
+    var blockY = block.length;
+
+    for (var y = 0; y < blockY; y++) {
+        for (var x = 0; x < blockX; x++) {
+            pr2++;
+            if (newBoard[y + y_][x + x_] != 0) throw('This position is already used!');
+            newBoard[y + y_][x + x_] = block[y][x];
         }
-        newBoard.push(row);
     }
-    return newBoard;
-}
 
+    return newBoard;
+
+}
 const createBlock = (x_, y_, color) => {
     var block = [];
     for (var y = 0; y < y_; y++) {
@@ -173,38 +192,8 @@ const solveBoardWithBlocks = (board, blockList_) => {
 
 };
 
-
-var board1 = createBlock(7, 8, 0);
-// var board1 = createBlock(4, 5, 0);
-
-const blockList = [
-    createBlock(3, 3, 1),
-    createBlock(3, 2, 2),
-    createBlock(3, 2, 3),
-    createBlock(3, 2, 4),
-    createBlock(1, 3, 5),
-    createBlock(2, 3, 6),
-    createBlock(6, 1, 3),
-    createBlock(1, 7, 1),
-    createBlock(1, 7, 1),
-];
-
-
-var t0 = Date.now();
-var sols = solveBoardWithBlocks(board1, blockList);
-console.log('Running time ', Date.now() - t0);
-
-
-sols.forEach(e => {
-    show.toScreen(e);
-    console.log();
-});
-
-console.log(pr1, pr2, pr3, pr4);
-console.log('possible sols: ', sols.length);
-// var board2 = createBlock(6, 6, 0);
-// board2 = putBlockOnBoard(board2, createBlock(3,3,1),0,0);
-
-// show.toScreen(board2);
-
-// console.log(ifFitsAtAll(board2, 3, 4));
+module.exports = {
+    createBlock : createBlock,
+    solveBoardWithBlocks  : solveBoardWithBlocks,
+    putBlockOnBoard : putBlockOnBoard
+};

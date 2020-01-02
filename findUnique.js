@@ -90,7 +90,7 @@ const findUnique = (board_, fixedBlockList_, blockList_) => {
             solMap[JSON.stringify(myBoard)] = sols;
         }
         // console.log(i);
-        // if (i > 1000) break;
+        if (i > 1000) break;
     }
 
     return solMap;

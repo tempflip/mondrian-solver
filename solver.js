@@ -21,8 +21,10 @@ const nextSteps = (board, block) => {
                 var nextStep = putBlockOnBoard(board, block, x, y);
                 nextList.push(nextStep);
             } catch(err) {
-                // console.log('##', y, blockY);
-                // y += 1;
+                // slide the pointer until we find a clear space
+                for (var i = 0; (i < blockY && y < (boardY - blockY)); i++) {
+                    if (board[y+1][x] != 0 ) y += 1;
+                }
                 //console.log('ez a pozi nem jo!', blockY)
             }
         }
@@ -192,9 +194,14 @@ const solveBoardWithBlocks = (board, blockList_) => {
 
 };
 
+const showMetrics = () => {
+    console.log('@@@ M: ', pr1, pr2, pr3, pr4);
+}
+
 module.exports = {
     createBlock : createBlock,
     solveBoardWithBlocks  : solveBoardWithBlocks,
     putBlockOnBoard : putBlockOnBoard,
-    nextSteps : nextSteps
+    nextSteps : nextSteps,
+    showMetrics : showMetrics
 };

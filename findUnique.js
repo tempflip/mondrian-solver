@@ -30,21 +30,29 @@ const getAllStartingBoards = (board_, fixedBlockList_) => {
 
     var startingBoardListJSON = startingBoardList.map((el) => JSON.stringify(el));
     filteredBoardList = [];
+    filteredBoardSet = new Set();
+    console.log('buuu');
     startingBoardListJSON.forEach(thisBoard => {
         var mirroredYBoard = JSON.stringify(mirrorY(JSON.parse(thisBoard)));
         var mirroredXBoard = JSON.stringify(mirrorX(JSON.parse(thisBoard)));
         var mirroredXYBoard = JSON.stringify(mirrorX(JSON.parse(mirroredYBoard)));
         
-        if (filteredBoardList.indexOf(thisBoard) == -1 
-        && filteredBoardList.indexOf(mirroredYBoard) == -1
-        && filteredBoardList.indexOf(mirroredXBoard) == -1
-        && filteredBoardList.indexOf(mirroredXYBoard) == -1
+        // if (filteredBoardList.indexOf(thisBoard) == -1 
+        // && filteredBoardList.indexOf(mirroredYBoard) == -1
+        // && filteredBoardList.indexOf(mirroredXBoard) == -1
+        // && filteredBoardList.indexOf(mirroredXYBoard) == -1
+        if (!filteredBoardSet.has(thisBoard)
+            && !filteredBoardSet.has(mirroredYBoard)
+            && !filteredBoardSet.has(mirroredXBoard)
+            && !filteredBoardSet.has(mirroredXYBoard)
         ) {
-            filteredBoardList.push(thisBoard);
+            // filteredBoardList.push(thisBoard);
+            filteredBoardSet.add(thisBoard);
         }
     });
     // return startingBoardList;
-    return filteredBoardList.map(el => JSON.parse(el));
+    // return Array.from(filteredBoardSet);
+    return Array.from(filteredBoardSet).map(el => JSON.parse(el));
 }
 
 const mirrorY = (board) => {
@@ -82,12 +90,13 @@ const findUnique = (board_, fixedBlockList_, blockList_) => {
             solMap[JSON.stringify(myBoard)] = sols;
         }
         // console.log(i);
-        // if (Object.keys(solMap).length > 3) break;
+        // if (i > 1000) break;
     }
 
     return solMap;
 }
 
+// var board1 = createBlock(8,8, 0);
 var board1 = createBlock(7,7, 0);
 
 const fixedBlockList = [
@@ -98,9 +107,11 @@ const fixedBlockList = [
 
 const blockList = [
     createBlock(1, 4, 4),
+    // createBlock(1, 5, 4), //
     createBlock(2, 2, 5),
     createBlock(2, 3, 6),
     createBlock(2, 4, 2),
+    // createBlock(2, 5, 2), //
     createBlock(3, 3, 3),
     createBlock(3, 4, 4),
 ];
@@ -110,15 +121,15 @@ const blockList = [
 
 var t0 = Date.now();
 var solMap = findUnique(board1, fixedBlockList, blockList);
-console.log(getAllStartingBoards(board1, fixedBlockList).length);
+// console.log(getAllStartingBoards(board1, fixedBlockList));
 
-
+solver.showMetrics();
 console.log('Running time ', Date.now() - t0);
 
-for (sol in solMap) {
-    show.toScreen(solMap[sol][0]);
-    console.log('....');
-}
+// for (sol in solMap) {
+//     show.toScreen(solMap[sol][0]);
+//     console.log('....');
+// }
 
 
 

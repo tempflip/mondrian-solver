@@ -89,7 +89,7 @@ const findUnique = (board_, fixedBlockList_, blockList_) => {
             console.log('#', i, sols.length);
             solMap[JSON.stringify(myBoard)] = sols;
         }
-        // console.log(i);
+        // if (i % 100 == 0) console.log(i);
         // if (i > 1000) break;
     }
 
@@ -114,6 +114,8 @@ const blockList = [
     // createBlock(2, 5, 2), //
     createBlock(3, 3, 3),
     createBlock(3, 4, 4),
+    
+
 ];
 
 

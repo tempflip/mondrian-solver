@@ -15,17 +15,17 @@ const nextSteps = (board, block) => {
     for (x = 0; x <= (boardX - blockX); x++) {
         for (var y = 0; y <= (boardY - blockY); y++) {
             if (!blockPuttable(board, blockX, blockY, x, y)) continue;
-            try {
+            // try {
                 var nextStep = putBlockOnBoard(board, block, x, y);
                 nextList.push(nextStep);
-            } catch(err) {
-                pr5++;
-                // slide the pointer until we find a clear space
-                for (var i = 0; (i < blockY && y < (boardY - blockY)); i++) {
-                    if (board[y+1][x] != 0 ) y += 1;
-                }
-                //console.log('ez a pozi nem jo!', blockY)
-            }
+            // } catch(err) {
+            //     pr5++;
+            //     // slide the pointer until we find a clear space
+            //     for (var i = 0; (i < blockY && y < (boardY - blockY)); i++) {
+            //         if (board[y+1][x] != 0 ) y += 1;
+            //     }
+            //     //console.log('ez a pozi nem jo!', blockY)
+            // }
         }
     }
     
@@ -41,30 +41,6 @@ const blockPuttable = (board, blockX, blockY, x_, y_) => {
     return true;
 }
 
-// const putBlockOnBoard = (board, block, x_, y_) => {
-//     pr3++;
-//     var newBoard = [];
-//     blockY = block.length;
-//     blockX = block[0].length;
-
-//     for (var y = 0; y < board.length; y++) {
-//         var row = [];
-//         for (var x = 0; x < board[0].length; x++) {
-//             pr2++;
-//             if (x >= x_ && x < x_+blockX && y >= y_ && y < y_+blockY) {
-//                 if (board[y][x] != 0) {
-//                     throw('This position is already used!');
-//                 }
-//                 row.push(block[y-y_][x-x_]);
-//             } else {
-//                 row.push(board[y][x]);
-//             }
-//         }
-//         newBoard.push(row);
-//     }
-//     return newBoard;
-// }
-
 const putBlockOnBoard = (board, block, x_, y_) => {
     pr3++;
     var newBoard = JSON.parse(JSON.stringify(board));
@@ -75,7 +51,7 @@ const putBlockOnBoard = (board, block, x_, y_) => {
     for (var y = 0; y < blockY; y++) {
         for (var x = 0; x < blockX; x++) {
             pr2++;
-            if (newBoard[y + y_][x + x_] != 0) throw('This position is already used!');
+            if (newBoard[y + y_][x + x_] != 0) throw('This position is already used!'); // this is mostly safety
             newBoard[y + y_][x + x_] = block[y][x];
         }
     }

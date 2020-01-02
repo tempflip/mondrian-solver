@@ -3,6 +3,7 @@ var pr1 = 0;
 var pr2 = 0;
 var pr3 = 0;
 var pr4 = 0;
+var pr5 = 0;
 const nextSteps = (board, block) => {
     pr1++;    
     var nextList = [];
@@ -11,16 +12,14 @@ const nextSteps = (board, block) => {
     var blockX = block[0].length;
     var blockY = block.length;
 
-    // no need bc there is pre filtering in the caller
-    // if (ifFitsAtAll(board, blockX, blockY) == false) return nextList; // if there is no way to fit, just jump out
-
-
     for (x = 0; x <= (boardX - blockX); x++) {
         for (var y = 0; y <= (boardY - blockY); y++) {
+            if (!blockPuttable(board, blockX, blockY, x, y)) continue;
             try {
                 var nextStep = putBlockOnBoard(board, block, x, y);
                 nextList.push(nextStep);
             } catch(err) {
+                pr5++;
                 // slide the pointer until we find a clear space
                 for (var i = 0; (i < blockY && y < (boardY - blockY)); i++) {
                     if (board[y+1][x] != 0 ) y += 1;
@@ -31,6 +30,15 @@ const nextSteps = (board, block) => {
     }
     
     return nextList;
+}
+
+const blockPuttable = (board, blockX, blockY, x_, y_) => {
+    for (var x = x_; x < x_+blockX; x++) {
+        for (var y = y_; y < y_+blockY; y++) {
+            if (board[y][x] != 0) return false;
+        }
+    }
+    return true;
 }
 
 // const putBlockOnBoard = (board, block, x_, y_) => {
@@ -195,7 +203,7 @@ const solveBoardWithBlocks = (board, blockList_) => {
 };
 
 const showMetrics = () => {
-    console.log('@@@ M: ', pr1, pr2, pr3, pr4);
+    console.log('@@@ M: ', pr1, pr2, pr3, pr4, pr5);
 }
 
 module.exports = {

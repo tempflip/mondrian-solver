@@ -154,20 +154,20 @@ const solveBoardWithBlocks = (board, blockList_) => {
             pr4++;
             
             var myNextSteps = nextSteps(brd, myBlock);
-            if (blockList.length > 0) {                
+            // if (blockList.length > 0) {                
 
-                myNextSteps = myNextSteps.filter(myBoard => {
-                    var allFits = true;
-                    blockList.forEach(thisBlock => {
-                        if (ifFitsAtAll(myBoard, thisBlock[0].length, thisBlock.length) == false) {
-                            allFits = false;
-                        }
-                    });
+            //     myNextSteps = myNextSteps.filter(myBoard => {
+            //         var allFits = true;
+            //         blockList.forEach(thisBlock => {
+            //             if (ifFitsAtAll(myBoard, thisBlock[0].length, thisBlock.length) == false) {
+            //                 allFits = false;
+            //             }
+            //         });
 
-                    return allFits;
-                });                
+            //         return allFits;
+            //     });                
 
-            }
+            // }
 
 
             rr = rr.concat(myNextSteps);

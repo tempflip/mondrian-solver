@@ -55,7 +55,20 @@ const addMouse = () => {
 
         // $('.board-element').removeClass('selected');
         // $(ev.target).addClass('selected');
-    })
+    });
+
+    $('.board-element').click( (ev) => {
+        var x = $(ev.target).attr('cx');
+        var y = $(ev.target).attr('cy');
+        board = putBlockOnBoard(board, selectedBlock, parseInt(x), parseInt(y));
+        draw(board);
+    });
+
+    $('.block-selector').click(ev => {
+        var selBlock = $(ev.target).attr('b');
+        selectedBlock = blockList[selBlock];
+        console.log('block selected', selectedBlock);
+    });
 }
 
 const startGame  = () => {

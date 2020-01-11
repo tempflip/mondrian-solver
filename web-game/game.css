@@ -1,0 +1,10 @@
+.board-element {
+    width: 30px;
+    height: 30px;
+    margin: 1px;
+    display: inline-block;
+}
+
+.selected {
+    background-color: red !important;
+}

@@ -1,7 +1,9 @@
 const chalk = require('chalk');
 
 const toScreen = (board) => {
-    const colors = ['black', 'blue', 'yellow', 'green', 'white', 'pink', 'grey', 'yellow']
+    const colors = ['black', 'blue', 'yellow', 'green', 
+        'white', 'pink', 'grey', 'magenta', 'cyan',
+        'orange']
     board.forEach(row => {
         row.forEach(pixel => {
             process.stdout.write(chalk.bgKeyword(colors[pixel])('' + pixel + pixel));

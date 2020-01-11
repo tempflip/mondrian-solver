@@ -9,27 +9,60 @@ const nextSteps = (board, block) => {
     var nextList = [];
     var boardX = board[0].length;
     var boardY = board.length;
+
+    // normal
+    ////////
     var blockX = block[0].length;
     var blockY = block.length;
-
     for (x = 0; x <= (boardX - blockX); x++) {
         for (var y = 0; y <= (boardY - blockY); y++) {
-            if (!blockPuttable(board, blockX, blockY, x, y)) continue;
-            // try {
+            
+            
+            if (blockPuttable(board, blockX, blockY, x, y)) {
                 var nextStep = putBlockOnBoard(board, block, x, y);
                 nextList.push(nextStep);
-            // } catch(err) {
-            //     pr5++;
-            //     // slide the pointer until we find a clear space
-            //     for (var i = 0; (i < blockY && y < (boardY - blockY)); i++) {
-            //         if (board[y+1][x] != 0 ) y += 1;
+            }
+
+            // if (blockX != blockY) {
+            //     if (blockPuttable(board, blockY, blockX, x, y)) {
+            //         var nextStep2 = putBlockOnBoard(board, transpose(block), x, y);
+            //         nextList.push(nextStep2);
             //     }
-            //     //console.log('ez a pozi nem jo!', blockY)
             // }
         }
     }
-    
+
+    // transposed -> merge with normal!
+    //////////////////////
+    if (blockX != blockY) {
+        blockTransposed = transpose(block);
+
+        var blockX = blockTransposed[0].length;
+        var blockY = blockTransposed.length;
+        for (x = 0; x <= (boardX - blockX); x++) {
+            for (var y = 0; y <= (boardY - blockY); y++) {
+                
+                if (blockPuttable(board, blockX, blockY, x, y)) {
+                    var nextStep = putBlockOnBoard(board, blockTransposed, x, y);
+                    nextList.push(nextStep);
+                }
+            }
+        }
+    }
+
     return nextList;
+}
+
+const transpose = (block) => {
+    var newBlock = [];
+    for (var x = 0; x < block[0].length; x ++) {
+        var row = [];
+        for (var y = 0; y < block.length; y ++) {
+            row.push(block[y][x]);
+        }
+        newBlock.push(row);
+    }
+    return newBlock;
 }
 
 const blockPuttable = (board, blockX, blockY, x_, y_) => {
@@ -186,6 +219,6 @@ module.exports = {
     createBlock : createBlock,
     solveBoardWithBlocks  : solveBoardWithBlocks,
     putBlockOnBoard : putBlockOnBoard,
-    nextSteps : nextSteps,
+    // nextSteps : nextSteps,
     showMetrics : showMetrics
 };

@@ -8,3 +8,7 @@
 .selected {
     background-color: red !important;
 }
+
+.selected-button {
+    background-color: yellow;
+}

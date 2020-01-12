@@ -1,14 +1,9 @@
-requirejs(["../solver"], function(solver) {
-    buildTable();
-    addMouse();
-    startGame();
-});
-
 var board;
 var NX = 8;
 var NY = 8;
-var selectedBlock;
+var selBlockI;
 var blockList;
+var onBoardBlocks = new Set();
 
 const buildTable  = () => {
 
@@ -24,6 +19,35 @@ const buildTable  = () => {
         $('#game').append(htmlRow);
     }
 }
+
+const buildBlocksButtons = () => {
+    var blocksDiv = $('#blocks');
+    blocksDiv.empty();
+    blockList.forEach((bl, i) => {
+        if (onBoardBlocks.has(i)) return;
+
+        var blY = bl.length;
+        var blX = bl[0].length;
+        var myButton = $('<button>' + blX + ' X ' + blY + '</button>');
+        myButton.attr('b', i);
+        myButton.addClass('block-selector');
+
+        if (i == selBlockI) {
+            myButton.addClass('selected-button');
+        }
+
+        blocksDiv.append(myButton);
+        blocksDiv.append($('<br>'));
+    });
+
+    $('.block-selector').click(ev => {
+        var selBlock = $(ev.target).attr('b');
+        selBlockI = parseInt(selBlock);
+        console.log('block selected', selBlockI);
+        buildBlocksButtons();
+    });    
+}
+
 
 const draw = (brd_, slt, x, y) => {
     const colors = ['grey', 'black', 'blue', 'yellow', 'green', 
@@ -51,24 +75,29 @@ const addMouse = () => {
         var x = $(ev.target).attr('cx');
         var y = $(ev.target).attr('cy');
         console.log(x,y);
-        draw(board, selectedBlock, parseInt(x), parseInt(y));
+        draw(board, getSelectedBlock(), parseInt(x), parseInt(y));
 
         // $('.board-element').removeClass('selected');
         // $(ev.target).addClass('selected');
     });
 
-    $('.board-element').click( (ev) => {
-        var x = $(ev.target).attr('cx');
-        var y = $(ev.target).attr('cy');
-        board = putBlockOnBoard(board, selectedBlock, parseInt(x), parseInt(y));
-        draw(board);
-    });
+    $('.board-element').click(dropBlockOnBoard);
 
-    $('.block-selector').click(ev => {
-        var selBlock = $(ev.target).attr('b');
-        selectedBlock = blockList[selBlock];
-        console.log('block selected', selectedBlock);
-    });
+
+}
+
+const dropBlockOnBoard = (ev) => {
+    var x = $(ev.target).attr('cx');
+    var y = $(ev.target).attr('cy');
+    board = putBlockOnBoard(board, getSelectedBlock(), parseInt(x), parseInt(y));
+    onBoardBlocks.add(selBlockI);
+    selBlockI = undefined;
+    draw(board);
+    buildBlocksButtons();
+};
+
+const getSelectedBlock = () => {
+    return blockList[selBlockI];
 }
 
 const startGame  = () => {
@@ -77,6 +106,11 @@ const startGame  = () => {
     board = putBlockOnBoard(board, createBlock(2, 1, 1), 5, 3);
     board = putBlockOnBoard(board, createBlock(3, 1, 1), 2, 7);    
 
+    console.log(blockList);
+    draw(board);
+}
+
+requirejs(["../solver"], function(solver) {
     blockList = [
         createBlock(3, 3, 2),
         createBlock(5, 1, 3),
@@ -87,9 +121,10 @@ const startGame  = () => {
         createBlock(3, 2, 8),
         createBlock(1, 4, 9),
     ];
+    selBlockI = 2;
 
-    selectedBlock = blockList[0];
-
-    console.log(blockList);
-    draw(board);
-}
+    buildTable();
+    buildBlocksButtons();
+    addMouse();
+    startGame();
+});

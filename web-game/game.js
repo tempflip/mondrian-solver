@@ -5,6 +5,9 @@ var selBlockI;
 var blockList;
 var onBoardBlocks = new Set();
 
+///////////////////////////
+// screen building methods
+////////////////////////////
 const buildTable  = () => {
 
     for(var y = 0; y < NY; y++) {
@@ -48,6 +51,20 @@ const buildBlocksButtons = () => {
     });    
 }
 
+const addMouse = () => {
+    $('.board-element').mouseover( (ev) => {
+        var x = $(ev.target).attr('cx');
+        var y = $(ev.target).attr('cy');
+        console.log(x,y);
+        draw(board, getSelectedBlock(), parseInt(x), parseInt(y));
+
+        // $('.board-element').removeClass('selected');
+        // $(ev.target).addClass('selected');
+    });
+
+    $('.board-element').click(dropBlockOnBoard);
+    $('#transpose').click(transposeCurrentBlock);
+}
 
 const draw = (brd_, slt, x, y) => {
     const colors = ['grey', 'black', 'blue', 'yellow', 'green', 
@@ -70,21 +87,10 @@ const draw = (brd_, slt, x, y) => {
 
 };
 
-const addMouse = () => {
-    $('.board-element').mouseover( (ev) => {
-        var x = $(ev.target).attr('cx');
-        var y = $(ev.target).attr('cy');
-        console.log(x,y);
-        draw(board, getSelectedBlock(), parseInt(x), parseInt(y));
+///////////////////////////
+// behavior methods
+////////////////////////////
 
-        // $('.board-element').removeClass('selected');
-        // $(ev.target).addClass('selected');
-    });
-
-    $('.board-element').click(dropBlockOnBoard);
-
-
-}
 
 const dropBlockOnBoard = (ev) => {
     var x = $(ev.target).attr('cx');
@@ -94,17 +100,47 @@ const dropBlockOnBoard = (ev) => {
     selBlockI = undefined;
     draw(board);
     buildBlocksButtons();
+    updateSolutionCount();
 };
+
+const transposeCurrentBlock = (ev) => {
+    blockList[selBlockI] = transpose(blockList[selBlockI]);
+    buildBlocksButtons();
+};
+
+
+///////////////////////////////////
+// helpers
+//////////////////////////////////
 
 const getSelectedBlock = () => {
     return blockList[selBlockI];
 }
 
+const updateSolutionCount = () => {
+    var sols = solveBoardWithBlocks(
+            JSON.parse(JSON.stringify(board)), 
+            JSON.parse(JSON.stringify(blockList.filter(filterOutUsedBlocks)))
+        );
+    console.log('bugg', sols.length);
+    $('#solution-count').text('I see here ' + sols.length + ' possible solutions');
+}
+
+const filterOutUsedBlocks = (bl, i) => {
+    if (onBoardBlocks.has(i)) return false;
+    return true;
+}
+
+//////////////////////////////////
+// quicking it off
+//////////////////////////////////
 const startGame  = () => {
     board = createBlock(NX, NY, 0);    
     board = putBlockOnBoard(board, createBlock(1, 1, 1), 7, 1);
     board = putBlockOnBoard(board, createBlock(2, 1, 1), 5, 3);
     board = putBlockOnBoard(board, createBlock(3, 1, 1), 2, 7);    
+
+    updateSolutionCount();
 
     console.log(blockList);
     draw(board);

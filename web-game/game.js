@@ -138,7 +138,7 @@ const startGame  = () => {
     board = createBlock(NX, NY, 0);    
     board = putBlockOnBoard(board, createBlock(1, 1, 1), 7, 1);
     board = putBlockOnBoard(board, createBlock(2, 1, 1), 5, 3);
-    board = putBlockOnBoard(board, createBlock(3, 1, 1), 2, 7);    
+    board = putBlockOnBoard(board, createBlock(3, 1, 1), 0, 7);    
 
     updateSolutionCount();
 
